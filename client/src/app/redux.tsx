@@ -6,6 +6,7 @@ import {
   useSelector,
   Provider,
 } from "react-redux";
+import globalReducer from "@/state";
 import { api } from "@/state/api";
 import { setupListeners } from "@reduxjs/toolkit/query";
 
@@ -21,7 +22,6 @@ import {
 } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
-import { globalSlice } from "@/state";
 
 /* REDUX PERSISTENCE */
 const createNoopStorage = () => {
@@ -49,7 +49,7 @@ const persistConfig = {
   whitelist: ["global"],
 };
 const rootReducer = combineReducers({
-  global: globalSlice,
+  global: globalReducer,
   [api.reducerPath]: api.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -80,7 +80,7 @@ export default function StoreProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const storeRef = useRef<AppStore>(); 
+  const storeRef = useRef<AppStore>(null);
   if (!storeRef.current) {
     storeRef.current = makeStore();
     setupListeners(storeRef.current.dispatch);
