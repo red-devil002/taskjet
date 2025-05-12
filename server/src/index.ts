@@ -1,3 +1,4 @@
+//route dircktory: server/src/routes for our backend.
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -6,6 +7,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 
 // Route Imports
+import projectRoutes from './routes/project.routes';
+import taskRoutes from './routes/task.routes';
 
 // Configurations
 dotenv.config();
@@ -24,8 +27,13 @@ app.get('/', (req, res) => {
   res.send('This is the home route!');
 });
 
+app.use("/projects", projectRoutes);
+app.use("/tasks", taskRoutes);
+
 // Server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+
